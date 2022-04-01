@@ -1,9 +1,19 @@
+
+
+
 #include <stdio.h>
+#include <stdio.h>
+#include <stdio.h>
+
 #include "stb_image.h"
 #include "stb_image_write.h"
-int main(){
- int a = 10;
- printf("%d", a);
 
+#define p(i, j) idata[(i)+(j)*iw]
+
+int main(){
+	
+	// строка, путь к файлу	
+	char* inputPath = "~/work/hampster.png";
+	int iw, ih, n;
  return 0;
 }
