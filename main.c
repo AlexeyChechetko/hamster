@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,7 +31,7 @@ bool similar(int delta, pixel p, int iw, int ih, pixel P[ih][iw]){
 	for(i=-delta; i<=delta; i++)	       
 		for(j=-delta; j<=delta; j++)
 	 		if(((p.x+j)>0) && ((p.x+j)<iw) && ((p.y+i)>0) && ((p.y+i)<ih))
-				if((abc(p.color[0]- P[p.x+i][p.y+j].color[0]) < 20) && (abc(p.color[1]- P[p.x+i][p.y+j].color[1]) < 20) && (abc(p.color[2]- P[p.x+i][p.y+j].color[2]) < 20))
+				if((abs(p.color[0]- P[p.x+i][p.y+j].color[0]) < 20) && (abs(p.color[1]- P[p.x+i][p.y+j].color[1]) < 20) && (abs(p.color[2]- P[p.x+i][p.y+j].color[2]) < 20))
 					tmp++;
 	if(tmp<=2*delta*delta)
 		return true;
@@ -73,7 +74,7 @@ int main(){
 	char *outputPath = "~/work/output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, ow, oh, n, odata, 0);
+	stbi_write_png(outputPath, iw, ih, n, odata, 0);
 
 	stbi_image_free(idata);
 	stbi_image_free(odata);
