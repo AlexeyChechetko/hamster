@@ -6,6 +6,8 @@
 
 typedef struct pixel_struct{
 	int number;
+	int num_i;
+	int num_j;
 	int position_idata;
 } pixel;
 
@@ -14,6 +16,11 @@ typedef struct Tree_struct{
 	pixel *pix;
 	int rank;
 } Tree;
+
+typedef struct Edge_struct{
+	int v1;
+	int v2;
+} Edge;
 
 Tree* Create_TreeNode(pixel *pix){
 	Tree *T_node = (Tree*) malloc(sizeof(Tree));
@@ -52,7 +59,7 @@ void Union(Tree *x, Tree *y){
 }
 
 int main(){
-	int i, size=0;
+	int i, size=0, k;
 
 	//Путь к файлу	
 	char *inputPath = "~/work/hampster.png";
@@ -71,6 +78,8 @@ int main(){
 	for(i=0; i<ih*iw*n; i+=3){
 		P[size] = (pixel*) malloc(sizeof(pixel));
 		P[size] -> number = size;
+		P[size] -> num_i = size/iw;
+		P[size] -> num_j = size % iw;
 		P[size] -> position_idata = i;
 		size++;
 	}
@@ -80,14 +89,15 @@ int main(){
 	for(i=0; i<size; i++)
 		Forest[i] = Create_TreeNode(P[i]);
 
-	//Edge *E;
-	//E = (Edge*) malloc(1*sizeof(Edge));
+	Edge *E;
+	E = (Edge*) malloc(1*sizeof(Edge));
+	for(k=0; k<size; k++){
+		if(P[k] -> num_i-1 > 0) && /*проверка цвета*/{
+			//добавить ребро между P[k] и P[iw*(P[k]->num_i-1) + P[k]->num_j]	
+			//Аналогично сделать проверку для других
+
 	
-	for(i=0; i<size; i++)
-		for(j=0; j<size; j++){
-			//if .....
-			//E[
-		}
+	
 
 	unsigned char *odata = (unsigned char*) malloc((iw*ih*n)*sizeof(unsigned char));
 
