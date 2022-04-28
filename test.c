@@ -31,7 +31,7 @@ Tree* Create_TreeNode(pixel *pix){
 	
 	T_node -> pix = pix;
 	T_node -> rank = 1;	
-	T-node -> change_color = false;
+	T_node -> change_color = false;
 
  return T_node;
 }
@@ -74,7 +74,7 @@ int main(){
 		return -1;
 	}
 	
-	unsigned char *idata_nex;
+	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n; i+=3){	
 		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
@@ -154,7 +154,7 @@ int main(){
 	char *outputPath = "~/work/output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, ow, oh, 1, odata, 0);
+	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
 
 	stbi_image_free(idata);
 	stbi_image_free(idata_new);
