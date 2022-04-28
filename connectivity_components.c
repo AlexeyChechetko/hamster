@@ -6,8 +6,9 @@
 
 typedef struct pixel_struct{
 	int number;
-	int num_x;
-	int num_y;
+	int num_i;
+	int num_j;
+	int position_idata;
 } pixel;
 
 typedef struct Tree_struct{
@@ -15,11 +16,6 @@ typedef struct Tree_struct{
 	pixel *pix;
 	int rank;
 } Tree;
-
-typedef struct Edge_struct{
-	int v1;
-	int v2;
-} Edge;
 
 Tree* Create_TreeNode(pixel *pix){
 	Tree *T_node = (Tree*) malloc(sizeof(Tree));
@@ -58,7 +54,7 @@ void Union(Tree *x, Tree *y){
 }
 
 int main(){
-	int i, size=0, e=0;
+	int i, size=0, k;
 
 	//Путь к файлу	
 	char *inputPath = "~/work/hampster.png";
@@ -71,21 +67,16 @@ int main(){
 		printf("Error: can't read file %s\n", inputPath);
 		return -1;
 	}
-	
-	unsigned char *idata_nex;
-	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	for(i=0; i<iw*ih*n; i+=3){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
-		size++;
-	}
 
 	pixel **P;
-        P = (pixel**) malloc(size*sizeof(pixel*));
-	for(i=0; i<size; i++){
+        P = (pixel**) malloc((ih*iw)*sizeof(pixel*));
+	for(i=0; i<ih*iw*n; i+=3){
 		P[size] = (pixel*) malloc(sizeof(pixel));
-		P[size] -> number = i;
-		P[size] -> num_y = i/iw;
-		P[size] -> num_x = i % iw;
+		P[size] -> number = size;
+		P[size] -> num_i = size/iw;
+		P[size] -> num_j = size % iw;
+		P[size] -> position_idata = i;
+		size++;
 	}
 	
 	Tree **Forest;
@@ -95,39 +86,13 @@ int main(){
 
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
-	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 50)){
-			E[e].v1 = i;
-			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
-		        e++;	
-			E = realloc(E, e+1);
-		}
+	for(k=0; k<size; k++){
+		if(P[k] -> num_i-1 > 0) && /*проверка цвета*/{
+			//добавить ребро между P[k] и P[iw*(P[k]->num_i-1) + P[k]->num_j]	
+			//Аналогично сделать проверку для других
 
-		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 50)){
-			E[e].v1 = i;
-			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
-		        e++;	
-			E = realloc(E, e+1);
-		}
-
-		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 50)){
-			E[e].v1 = i;
-			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
-		        e++;	
-			E = realloc(E, e+1);
-		}
-
-		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 50)){
-			E[e].v1 = i;
-			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
-		        e++;	
-			E = realloc(E, e+1);
-		}
-	}
-
-	for(i=0; i<e; i++)
-		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2]))
-			Union(Forest[E[i].v1], Forest[E[i].v2]);
+	
+	
 
 	unsigned char *odata = (unsigned char*) malloc((iw*ih*n)*sizeof(unsigned char));
 

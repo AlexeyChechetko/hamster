@@ -4,42 +4,62 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-//#define p(i, j) idata[(i)*iw+(j)] //пиксель с координатами i, j
-
 typedef struct pixel_struct{
-	unsigned char color[3];
-	int x;
-	int y;
+	int number;
+	int num_i;
+	int num_j;
+	int position_idata;
 } pixel;
 
-int pixel_number(int i, int j, int iw){
-	int tmp;
-	if(!((i*iw+j)%3))
-		return (i)*iw+(j);
-	else{
-		tmp = i*iw+j;
-		while(tmp%3)	
-			tmp++;
-		return tmp;
+typedef struct Tree_struct{
+	struct Tree_struct *par;
+	pixel *pix;
+	int rank;
+} Tree;
+
+typedef struct Edge_struct{
+	int v1;
+	int v2;
+} Edge;
+
+Tree* Create_TreeNode(pixel *pix){
+	Tree *T_node = (Tree*) malloc(sizeof(Tree));
+	if(T_node==NULL){
+		printf("Error");	
+		return NULL;
 	}
+	
+	T_node -> pix = pix;
+	T_node -> rank = 1;	
+
+ return T_node;
 }
 
-bool similar(int delta, pixel p, int iw, int ih, pixel P[ih][iw]){
-	int i, j, tmp = 0;
+Tree* Find_Set(Tree *tmp){
+	if(tmp != tmp -> par)
+		tmp -> par = Find_Set(tmp -> par);
+	return tmp -> par;
+}
 
-	for(i=-delta; i<=delta; i++)	       
-		for(j=-delta; j<=delta; j++)
-	 		if(((p.x+j)>0) && ((p.x+j)<iw) && ((p.y+i)>0) && ((p.y+i)<ih))
-				if((abc(p.color[0]- P[p.x+i][p.y+j].color[0]) < 20) && (abc(p.color[1]- P[p.x+i][p.y+j].color[1]) < 20) && (abc(p.color[2]- P[p.x+i][p.y+j].color[2]) < 20))
-					tmp++;
-	if(tmp<=2*delta*delta)
-		return true;
-	else
-		return false;
+void Link(Tree *x, Tree *y){
+	if(x->rank > y->rank)
+		y -> par = x;
+	else{
+		x -> par = y;
+		if(x -> rank == y -> rank)
+			y -> rank++;
+	}
+
+ return;
+}
+
+void Union(Tree *x, Tree *y){
+	Link(Find_Set(x), Find_Set(y));
+ return;
 }
 
 int main(){
-	int i, j, number;
+	int i, size=0, k;
 
 	//Путь к файлу	
 	char *inputPath = "~/work/hampster.png";
@@ -53,20 +73,32 @@ int main(){
 		return -1;
 	}
 
-       	//Массив пикселей 
-	pixel P[ih][iw];
-       
-	//Заполняем массив
-	for(i=0; i<ih; i++)
-		for(j=0; j<iw; j++){
-			number = pixel_number(i, j, iw);
-			P[i][j].color[0] = idata[number];
-			P[i][j].color[1] = idata[number+1];
-			P[i][j].color[2] = idata[number+2];
-			P[i][j].x = j;
-			P[i][j].y = i;
-		}
+	pixel **P;
+        P = (pixel**) malloc((ih*iw)*sizeof(pixel*));
+	for(i=0; i<ih*iw*n; i+=3){
+		P[size] = (pixel*) malloc(sizeof(pixel));
+		P[size] -> number = size;
+		P[size] -> num_i = size/iw;
+		P[size] -> num_j = size % iw;
+		P[size] -> position_idata = i;
+		size++;
+	}
 	
+	Tree **Forest;
+	Forest = (Tree**) malloc(size*sizeof(Tree*));	
+	for(i=0; i<size; i++)
+		Forest[i] = Create_TreeNode(P[i]);
+
+	Edge *E;
+	E = (Edge*) malloc(1*sizeof(Edge));
+	for(k=0; k<size; k++){
+		if(P[k] -> num_i-1 > 0) && /*проверка цвета*/{
+			//добавить ребро между P[k] и P[iw*(P[k]->num_i-1) + P[k]->num_j]	
+			//Аналогично сделать проверку для других
+
+	
+	
+
 	unsigned char *odata = (unsigned char*) malloc((iw*ih*n)*sizeof(unsigned char));
 
 	//Путь к выходной картинке 
