@@ -14,6 +14,7 @@ typedef struct Tree_struct{
 	struct Tree_struct *par;
 	pixel *pix;
 	int rank;
+	bool change_color;
 } Tree;
 
 typedef struct Edge_struct{
@@ -30,6 +31,7 @@ Tree* Create_TreeNode(pixel *pix){
 	
 	T_node -> pix = pix;
 	T_node -> rank = 1;	
+	T-node -> change_color = false;
 
  return T_node;
 }
@@ -128,16 +130,34 @@ int main(){
 	for(i=0; i<e; i++)
 		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2]))
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
+	
+	Tree *T;
+	int j;
+	unsigned char color;
+	for(i=0; i<size; i++){
+		if(Forest[i] -> change_color==false){
+			T = Forest[i] -> par;
+			color =  i%250;
+			for(j=0;j<size;j++)
+				if(Forest[j] -> par == T){
+					idata_new[j] = color;
+					Forest[j] -> change_color = true;
+				}
+		}
+	}
 
-	unsigned char *odata = (unsigned char*) malloc((iw*ih*n)*sizeof(unsigned char));
+	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	odata = idata_new;
+	
 
 	//Путь к выходной картинке 
 	char *outputPath = "~/work/output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, ow, oh, n, odata, 0);
+	stbi_write_png(outputPath, ow, oh, 1, odata, 0);
 
 	stbi_image_free(idata);
+	stbi_image_free(idata_new);
 	stbi_image_free(odata);
 
  return 0;
