@@ -69,7 +69,7 @@ int main(){
 	int i, size=0, e=0;
 
 	//Путь к файлу	
-	char *inputPath = "~/work/hampster.png";
+	const char *inputPath = "~/work/hampster.png";
 	// iw - ширина, ih - высота, n - кол-о цветов, число каналов по цвету (сколько байт используется для одного пикселя)
 	int ih, iw, n;
 	
