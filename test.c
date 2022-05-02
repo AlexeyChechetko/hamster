@@ -84,7 +84,7 @@ int main(){
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*2)/32;
+		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
 		size++;
 	}
 	printf("size=%d\n", size);
@@ -161,7 +161,7 @@ int main(){
 	
 
 	//Путь к выходной картинке 
-	char *outputPath = "output.png";
+	char *outputPath = "output2.png";
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
