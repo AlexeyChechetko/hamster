@@ -38,6 +38,7 @@ Tree* Create_TreeNode(pixel *pix){
 	T_node -> pix = pix;
 	T_node -> rank = 1;	
 	T_node -> change_color = false;
+	T_node -> par = T_node;
 
  return T_node;
 }
@@ -69,7 +70,7 @@ int main(){
 	int i, size=0, e=0;
 
 	//Путь к файлу	
-	const char *inputPath = "~/work/hampster.png";
+	char *inputPath = "hampster.png";
 	// iw - ширина, ih - высота, n - кол-о цветов, число каналов по цвету (сколько байт используется для одного пикселя)
 	int ih, iw, n;
 	
@@ -79,28 +80,30 @@ int main(){
 		printf("Error: can't read file %s\n", inputPath);
 		return -1;
 	}
-	
+	printf("%d %d %d %d\n", iw, ih, n, idata[1000]);	
 	unsigned char *idata_new;
-	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	for(i=0; i<iw*ih*n; i+=3){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
+	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
+	for(i=0; i<iw*ih*n-4; i+=4){	
+		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*2)/32;
 		size++;
 	}
-
+	printf("size=%d\n", size);
 	pixel **P;
         P = (pixel**) malloc(size*sizeof(pixel*));
 	for(i=0; i<size; i++){
-		P[size] = (pixel*) malloc(sizeof(pixel));
-		P[size] -> number = i;
-		P[size] -> num_y = i/iw;
-		P[size] -> num_x = i % iw;
+		P[i] = (pixel*) malloc(sizeof(pixel));
+		P[i] -> number = i;
+		P[i] -> num_y = i/iw;
+		P[i] -> num_x = i % iw;
 	}
-	
+	printf("%d %d %d size=%d\n", P[100]->number, P[100]->num_y, P[100]->num_x, size);	
 	Tree **Forest;
 	Forest = (Tree**) malloc(size*sizeof(Tree*));	
 	for(i=0; i<size; i++)
 		Forest[i] = Create_TreeNode(P[i]);
 
+	for(i=0; i<20; i++)
+		printf("%d %d ", Forest[i]->rank, Forest[i]->pix->number);
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
 	for(i=0; i<size; i++){
@@ -108,35 +111,36 @@ int main(){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
-			E = realloc(E, e+1);
+			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
 		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 50)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
-			E = realloc(E, e+1);
+			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
 		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 50)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
-			E = realloc(E, e+1);
+			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
 		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 50)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
-			E = realloc(E, e+1);
+			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 	}
-
+	printf("e=%d, %d\n", e, E[e-1].v2);
+			
 	for(i=0; i<e; i++)
 		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2]))
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
-	
+		
 	Tree *T;
 	int j;
 	unsigned char color;
@@ -152,19 +156,17 @@ int main(){
 		}
 	}
 
-	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	odata = idata_new;
 	
 
 	//Путь к выходной картинке 
-	char *outputPath = "~/work/output.png";
+	char *outputPath = "output.png";
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
 
 	stbi_image_free(idata);
-	stbi_image_free(idata_new);
-	stbi_image_free(odata);
-
+		
  return 0;
 }
