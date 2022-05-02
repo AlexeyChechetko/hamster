@@ -84,7 +84,7 @@ int main(){
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
+		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*15)/32;
 		size++;
 	}
 	printf("size=%d\n", size);
@@ -107,28 +107,28 @@ int main(){
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
 	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 50)){
+		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 50)){
+		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 50)){
+		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 50)){
+		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
@@ -161,7 +161,7 @@ int main(){
 	
 
 	//Путь к выходной картинке 
-	char *outputPath = "output2.png";
+	char *outputPath = "output3.png";
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
