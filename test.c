@@ -142,12 +142,13 @@ int main(){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		
 	Tree *T;
-	int j;
+	int j, tmp = 0;
 	unsigned char color;
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
 			T = Forest[i] -> par;
-			color =  i%250;
+			color =  (10+tmp)%250;
+			tmp+=(i+1);
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
 					idata_new[j] = color;
