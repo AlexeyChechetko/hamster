@@ -84,7 +84,7 @@ int main(){
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*10 + idata[i+1]*5 + idata[i+2]*10 + idata[i+3]*15)/32;
+		idata_new[size] = (idata[i]*10 + idata[i+1]*15 + idata[i+2]*5 + idata[i+3]*15)/32;
 		size++;
 	}
 	printf("size=%d\n", size);
