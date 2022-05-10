@@ -80,7 +80,7 @@ int main(){
 		printf("Error: can't read file %s\n", inputPath);
 		return -1;
 	}
-	printf("%d %d %d %d\n", iw, ih, n, idata[1000]);	
+	
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
@@ -139,7 +139,7 @@ int main(){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		
 	Tree *T;
-	int j, tmp = 0;
+	int j, tmp = 0, idata_num;
 	unsigned char color;
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
@@ -148,21 +148,24 @@ int main(){
 			tmp+=(i+1);
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata_new[j] = color;
+					idata_num = j*n;
+					idata[idata_num] = color;
+					idata[idata_num+1] = color/2;
+					idata[idata_num+2] = color%100;
 					Forest[j] -> change_color = true;
 				}
 		}
 	}
 
-	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
-	odata = idata_new;
+	unsigned char *odata = (unsigned char*) malloc((iw*ih*n)*sizeof(unsigned char));
+	odata = idata;
 	
 
 	//Путь к выходной картинке 
-	char *outputPath = "output.png";
+	char *outputPath = "output2.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
+	stbi_write_png(outputPath, iw, ih, n, odata, 0);
 
 	stbi_image_free(idata);
 		
