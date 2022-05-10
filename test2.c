@@ -136,19 +136,24 @@ int main(){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		
 	Tree *T;
-	int j, tmp = 0, idata_num;
+	int j, idata_num;
+	float A = 0.618, drob1, drob2, tmp2, cel1, cel2;
 	unsigned char color;
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
 			T = Forest[i] -> par;
-			color =  (10+tmp)%250;
-			tmp+=(i+1);
+			drob1 = modff((i*A), &cel1); 
+			tmp2 = 250 * (drob1);
+			drob2 = modff(tmp2, &cel2);
+			color = cel2;
+		//	color =  (10+tmp)%250;
+		//	tmp+=(i+1);dc1=modff (127,33,&cc1);
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
 					idata_num = j*n;
 					idata[idata_num] = color;
-					idata[idata_num+1] = color/2;
-					idata[idata_num+2] = color%100;
+					idata[idata_num+1] = color;
+					idata[idata_num+2] = color;
 					Forest[j] -> change_color = true;
 				}
 		}
