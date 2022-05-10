@@ -81,13 +81,7 @@ int main(){
 		return -1;
 	}
 	
-	unsigned char *idata_new;
-	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
-	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*10 + idata[i+1]*15 + idata[i+2]*5 + idata[i+3]*15)/32;
-		size++;
-	}
-	
+	size = iw*ih;
 	pixel **P;
         P = (pixel**) malloc(size*sizeof(pixel*));
 	for(i=0; i<size; i++){
@@ -104,29 +98,32 @@ int main(){
 
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
+	int n1, n2;
 	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 10)){
+		n1 = P[i] -> num_y;
+		n2 = P[i] -> num_x;
+		if((n1-1 > 0) && (abs(idata[n*(iw*(n1-1) + n2)] - idata[n*i]) < 10) && (abs(idata[n*(iw*(n1-1) + n2)+1] - idata[n*i+1]) < 10) && (abs(idata[n*(iw*(n1-1) + n2)+2] - idata[n*i+2]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 10)){
+		if((n1+1 < ih) && (abs(idata[n*(iw*(n1+1) + n2)] - idata[n*i]) < 10) && (abs(idata[n*(iw*(n1+1) + n2)+1] - idata[n*i+1]) < 10) && (abs(idata[n*(iw*(n1+1) + n2)+2] - idata[n*i+2]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 10)){
+		if((n2-1 > 0) && (abs(idata[n*(iw*n1 + n2 - 1)] - idata[n*i]) < 10)  && (abs(idata[n*(iw*n1 + n2 - 1)+1] - idata[n*i+1]) < 10)  && (abs(idata[n*(iw*n1 + n2 - 1)+2] - idata[n*i+2]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 10)){
+		if((n2+1 < iw) && (abs(idata[n*(iw*n1 + n2 + 1)] - idata[n*i]) < 10)  && (abs(idata[n*(iw*n1 + n2 + 1)+1] - idata[n*i+1]) < 10)  && (abs(idata[n*(iw*n1 + n2 + 1)+2] - idata[n*i+2]) < 10)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
@@ -162,7 +159,7 @@ int main(){
 	
 
 	//Путь к выходной картинке 
-	char *outputPath = "output2.png";
+	char *outputPath = "output_idata.png";
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, n, odata, 0);
