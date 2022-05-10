@@ -102,28 +102,28 @@ int main(){
 	for(i=0; i<size; i++){
 		n1 = P[i] -> num_y;
 		n2 = P[i] -> num_x;
-		if((n1-1 > 0) && (abs(idata[n*(iw*(n1-1) + n2)] - idata[n*i]) < 5) && (abs(idata[n*(iw*(n1-1) + n2)+1] - idata[n*i+1]) < 3) && (abs(idata[n*(iw*(n1-1) + n2)+2] - idata[n*i+2]) < 5)){
+		if((n1-1 > 0) && (abs(idata[n*(iw*(n1-1) + n2)] - idata[n*i]) < 1) && (abs(idata[n*(iw*(n1-1) + n2)+1] - idata[n*i+1]) < 1) && (abs(idata[n*(iw*(n1-1) + n2)+2] - idata[n*i+2]) < 2)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((n1+1 < ih) && (abs(idata[n*(iw*(n1+1) + n2)] - idata[n*i]) < 5) && (abs(idata[n*(iw*(n1+1) + n2)+1] - idata[n*i+1]) < 3) && (abs(idata[n*(iw*(n1+1) + n2)+2] - idata[n*i+2]) < 5)){
+		if((n1+1 < ih) && (abs(idata[n*(iw*(n1+1) + n2)] - idata[n*i]) < 1) && (abs(idata[n*(iw*(n1+1) + n2)+1] - idata[n*i+1]) < 1) && (abs(idata[n*(iw*(n1+1) + n2)+2] - idata[n*i+2]) < 2)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((n2-1 > 0) && (abs(idata[n*(iw*n1 + n2 - 1)] - idata[n*i]) < 5)  && (abs(idata[n*(iw*n1 + n2 - 1)+1] - idata[n*i+1]) < 3)  && (abs(idata[n*(iw*n1 + n2 - 1)+2] - idata[n*i+2]) < 5)){
+		if((n2-1 > 0) && (abs(idata[n*(iw*n1 + n2 - 1)] - idata[n*i]) < 1)  && (abs(idata[n*(iw*n1 + n2 - 1)+1] - idata[n*i+1]) < 1)  && (abs(idata[n*(iw*n1 + n2 - 1)+2] - idata[n*i+2]) < 2)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((n2+1 < iw) && (abs(idata[n*(iw*n1 + n2 + 1)] - idata[n*i]) < 5)  && (abs(idata[n*(iw*n1 + n2 + 1)+1] - idata[n*i+1]) < 3)  && (abs(idata[n*(iw*n1 + n2 + 1)+2] - idata[n*i+2]) < 5)){
+		if((n2+1 < iw) && (abs(idata[n*(iw*n1 + n2 + 1)] - idata[n*i]) < 1)  && (abs(idata[n*(iw*n1 + n2 + 1)+1] - idata[n*i+1]) < 1)  && (abs(idata[n*(iw*n1 + n2 + 1)+2] - idata[n*i+2]) < 2)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
