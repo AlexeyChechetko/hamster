@@ -211,7 +211,7 @@ int main(){
 	char *outputPath = "output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 3, idata_new, 0);
+	stbi_write_png(outputPath, iw, ih, n, idata_new, 0);
 	stbi_image_free(idata);
 	stbi_image_free(idata_new);
 	//stbi_image_free(idata_new_change1);
