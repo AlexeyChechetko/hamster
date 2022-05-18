@@ -122,7 +122,7 @@ int main(){
 		size++;
 	}
 
-	//Применяем фильтры
+	/*//Применяем фильтры
 	unsigned char *idata_new_change1;
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
@@ -132,7 +132,7 @@ int main(){
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
 	idata_new_change2 = smoothing(idata_new_change1, ih, iw);
-	
+	*/
 
 	//Создаем пиксели
 	pixel **P;
@@ -154,28 +154,28 @@ int main(){
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
 	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(idata_new_change2[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new_change2[i]) < 5)){
+		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_y+1 < ih) && (abs(idata_new_change2[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new_change2[i]) < 5)){
+		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x-1 > 0) && (abs(idata_new_change2[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new_change2[i]) < 5)){
+		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x+1 < iw) && (abs(idata_new_change2[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new_change2[i]) < 5)){
+		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
@@ -184,7 +184,7 @@ int main(){
 	}
 
 	//Разбиваем на компоненты 	
-	for(i=0; i<e-5000; i++)
+	for(i=0; i<e; i++)
 		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2])){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		}
@@ -195,10 +195,10 @@ int main(){
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
 			T = Forest[i] -> par;
-			color =  (20+idata_new_change2[T->pix->number])%250;
+			color =  (20+idata_new[T->pix->number])%250;
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata_new_change2[j] = color;
+					idata_new[j] = color;
 					Forest[j] -> change_color = true;
 				}
 		}
@@ -209,7 +209,7 @@ int main(){
 	char *outputPath = "output.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	odata = idata_new_change2;
+	odata = idata_new;
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
