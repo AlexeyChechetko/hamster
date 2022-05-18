@@ -115,7 +115,7 @@ int main(){
 
 	//Переходим к одноканальному изображению
 	unsigned char *idata_new;
-	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
 		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*10)/32;
 		size++;
@@ -206,10 +206,13 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output.png";
+	char *outputPath = "output2.png";
+	
+	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
+	odata = idata_new;
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, idata_new, 0);
+	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
 	stbi_image_free(idata);
 	stbi_image_free(idata_new);
 	//stbi_image_free(idata_new_change1);
