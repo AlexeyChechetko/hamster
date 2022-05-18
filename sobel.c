@@ -33,27 +33,33 @@ int main(){
 	}
 
 	//Применяем фильтр Гаусса
-	unsigned char *idata_new2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	
 	for(i=2; i<=ih-2; i++)
 		for(j=2; j<iw-2; j++)
-			idata_new2[iw*i+j] = (0.0924)*idata_new[iw*(i-1)+(j-1)]+(0.1192)*idata_new[iw*i+(j-1)]+(0.0924)*idata_new[iw*(i+1)+(j-1)]+(0.0924)*idata_new[iw*(i-1)+(j+1)]+(0.1192)*idata_new[iw*i+(j+1)]+(0.0924)*idata_new[iw*(i+1)+(j+1)]+(0.1192)*idata_new[iw*(i-1)+j]+(0.1192)*idata_new[iw*(i+1)+j];
+			odata[iw*i+j] = (0.0924)*idata_new[iw*(i-1)+(j-1)]+(0.1192)*idata_new[iw*i+(j-1)]+(0.0924)*idata_new[iw*(i+1)+(j-1)]+(0.0924)*idata_new[iw*(i-1)+(j+1)]+(0.1192)*idata_new[iw*i+(j+1)]+(0.0924)*idata_new[iw*(i+1)+(j+1)]+(0.1192)*idata_new[iw*(i-1)+j]+(0.1192)*idata_new[iw*(i+1)+j]+(0.1538)*idata_new[iw*i+j];
 
 
-	//Применяем фильтр Собеля
+	/*//Применяем фильтр Собеля
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	unsigned char gx, gy;
 	
-	for(i=2; i<=ih-2; i++)
+	/*for(i=2; i<=ih-2; i++)
 		for(j=2; j<iw-2; j++){
 			gy = 3*idata_new2[iw*(i-1)+(j-1)]+10*idata_new2[iw*i+(j-1)]+3*idata_new2[iw*(i+1)+(j-1)]-3*idata_new2[iw*(i-1)+(j+1)]-10*idata_new2[iw*i+(j+1)]-3*idata_new2[iw*(i+1)+(j+1)];
 			gx = 3*idata_new2[iw*(i-1)+(j-1)]+10*idata_new2[iw*(i-1)+j]+3*idata_new2[iw*(i-1)+(j+1)]-3*idata_new2[iw*(i+1)+(j-1)]-10*idata_new2[iw*(i+1)+j]-3*idata_new2[iw*(i+1)+(j+1)];
 			odata[iw*i+j] = sqrt(gx*gx + gy*gy);
 		}
+	
+
+	for(i=2; i<=ih-2; i++)
+		for(j=2; j<iw-2; j++)
+			odata[iw*i+j] = 3*idata_new2[iw*(i-1)+(j-1)]+10*idata_new2[iw*i+(j-1)]+3*idata_new2[iw*(i+1)+(j-1)]-3*idata_new2[iw*(i-1)+(j+1)]-10*idata_new2[iw*i+(j+1)]-3*idata_new2[iw*(i+1)+(j+1)];
+		*/
 
 	
 	//Путь к выходной картинке 
-	char *outputPath = "sobel3.png";
+	char *outputPath = "gaus1.png";
 	
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
