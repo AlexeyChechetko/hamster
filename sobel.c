@@ -38,7 +38,7 @@ int main(){
 		for(j=2; j<iw-2; j++)
 			idata_new2[iw*i+j] = (1/9)*idata_new[iw*(i-1)*(j-1)]+(1/9)*idata_new[iw*i+(j-1)]+(1/9)*idata_new[iw*(i+1)+(j-1)]+(1/9)*idata_new[iw*(i-1)+(j+1)]+(1/9)*idata_new[iw*i+(j+1)]+(1/9)*idata_new[iw*(i+1)+(j+1)];
 
-	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	/*unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	unsigned char gx, gy;
 	
 	for(i=2; i<ih-2; i++)
@@ -48,12 +48,12 @@ int main(){
 			odata[iw*i+j] = sqrt(gx*gx + gy*gy);
 		}
 
-
+	*/
 	//Путь к выходной картинке 
 	char *outputPath = "sobel.png";
 	
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
+	stbi_write_png(outputPath, iw, ih, 1, idata_new2, 0);
 	stbi_image_free(idata);
 	stbi_image_free(idata_new);
  
