@@ -122,11 +122,11 @@ int main(){
 		size++;
 	}
 
-	/*//Применяем фильтры
+	//Применяем фильтры
 	unsigned char *idata_new_change1;
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
-	idata_new_change1 = Sobel(idata_new, ih, iw);*/
+	idata_new_change1 = Sobel(idata_new, ih, iw);
 	/*unsigned char *idata_new_change2;
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
@@ -209,7 +209,7 @@ int main(){
 	char *outputPath = "output5.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	odata = idata_new;
+	odata = idata_new_change1;
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
