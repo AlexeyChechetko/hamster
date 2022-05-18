@@ -1,8 +1,8 @@
-all: test.o
-	gcc test.o -o test.exe -lm
+all: sobel.o
+	gcc sobel.o -o sobel.exe -lm
 
-test.o:
-	gcc -c test.c
+sobel.o:
+	gcc -c sobel.c
 
 clean:
 	rm *o
