@@ -70,7 +70,8 @@ void Union(Tree *x, Tree *y){
 
 unsigned char* Sobel(unsigned char *idata, int ih, int iw){
 	int i, j;
-	unsigned char *idata_change = (unsigned char*) calloc((iw*ih+1), sizeof(unsigned char));
+	unsigned char *idata_change = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
+	idata_change = idata;
 	unsigned char gx, gy;
 	
 	for(i=2; i<ih-2; i++)
@@ -119,21 +120,25 @@ int main(){
 	for(i=0; i<iw*ih*n-4; i+=4){	
 		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
 		size++;
+		if(size<10000 && size>9900)
+			printf("%u\n", idata_new[size]);
 	}
-		
+
+	printf("\n\n");
 	//Применяем фильтры
 	unsigned char *idata_new_change1;
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
 	idata_new_change1 = Sobel(idata_new, ih, iw);
-	
-	unsigned char *idata_new_change2;
+	for(i=9900;i<10000;i++)
+		printf("%u\n", idata_new_change1[i]);
+	/*unsigned char *idata_new_change2;
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
 	idata_new_change2 = smoothing(idata_new_change1, ih, iw);
 	
 
-	/*//Создаем пиксели
+	//Создаем пиксели
 	pixel **P;
         P = (pixel**) malloc(size*sizeof(pixel*));
 	for(i=0; i<size; i++){
@@ -206,10 +211,10 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output2.png";
+	char *outputPath = "output3.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
-	odata = idata_new_change2;
+	odata = idata_new_change1;
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
