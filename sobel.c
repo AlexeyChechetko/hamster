@@ -8,22 +8,6 @@
 #include "stb_image_write.h"
 
 
-unsigned char* Sobel(unsigned char *idata, int ih, int iw){
-	int i, j;
-	unsigned char *idata_change = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	unsigned char gx, gy;
-	
-	for(i=2; i<ih-2; i++)
-		for(j=2; j<iw-2; j++){
-			gx = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*i+(j-1)]-1*idata[iw*(i+1)+(j-1)]+1*idata[iw*(i-1)+(j+1)]+2*idata[iw*i+(j+1)]+1*idata[iw*(i+1)+(j+1)];
-			gy = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*(i-1)+j]-1*idata[iw*(i-1)+(j+1)]+1*idata[iw*(i+1)+(j-1)]+2*idata[iw*(i+1)+j]+1*idata[iw*(i+1)+(j+1)];
-			idata_change[iw*i+j] = sqrt(gx*gx + gy*gy);
-		}
-	
-	return idata_change;
-}
-
-
 int main(){
 	int i, j,  size=0;
 
@@ -38,8 +22,6 @@ int main(){
 		printf("Error: can't read file %s\n", inputPath);
 		return -1;
 	}
-
-	printf("%d %d %d\n", iw, ih, n);
 
 	//Переходим к одноканальному изображению
 	unsigned char *idata_new;
@@ -56,8 +38,8 @@ int main(){
 	
 	for(i=2; i<ih-2; i++)
 		for(j=2; j<iw-2; j++){
-			gx = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*i+(j-1)]-1*idata[iw*(i+1)+(j-1)]+1*idata[iw*(i-1)+(j+1)]+2*idata[iw*i+(j+1)]+1*idata[iw*(i+1)+(j+1)];
-			gy = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*(i-1)+j]-1*idata[iw*(i-1)+(j+1)]+1*idata[iw*(i+1)+(j-1)]+2*idata[iw*(i+1)+j]+1*idata[iw*(i+1)+(j+1)];
+			gx = -1*idata_new[iw*(i-1)+(j-1)]-2*idata_new[iw*i+(j-1)]-1*idata_new[iw*(i+1)+(j-1)]+1*idata_new[iw*(i-1)+(j+1)]+2*idata_new[iw*i+(j+1)]+1*idata_new[iw*(i+1)+(j+1)];
+			gy = -1*idata_new[iw*(i-1)+(j-1)]-2*idata_new[iw*(i-1)+j]-1*idata_new[iw*(i-1)+(j+1)]+1*idata_new[iw*(i+1)+(j-1)]+2*idata_new[iw*(i+1)+j]+1*idata_new[iw*(i+1)+(j+1)];
 			odata[iw*i+j] = sqrt(gx*gx + gy*gy);
 		}
 
