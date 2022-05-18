@@ -117,7 +117,7 @@ int main(){
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*10)/32;
+		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
 		size++;
 	}
 		
