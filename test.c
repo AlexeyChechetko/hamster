@@ -120,18 +120,13 @@ int main(){
 	for(i=0; i<iw*ih*n-4; i+=4){	
 		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
 		size++;
-		if(size<10000 && size>9900)
-			printf("%u\n", idata_new[size]);
 	}
 
-	printf("\n\n");
-	//Применяем фильтры
+	/*//Применяем фильтры
 	unsigned char *idata_new_change1;
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
-	idata_new_change1 = Sobel(idata_new, ih, iw);
-	for(i=9900;i<10000;i++)
-		printf("%u\n", idata_new_change1[i]);
+	idata_new_change1 = Sobel(idata_new, ih, iw);*/
 	/*unsigned char *idata_new_change2;
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
@@ -214,7 +209,7 @@ int main(){
 	char *outputPath = "output3.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
-	odata = idata_new_change1;
+	odata = idata_new;
 
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
