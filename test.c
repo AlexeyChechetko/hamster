@@ -70,7 +70,7 @@ void Union(Tree *x, Tree *y){
 
 unsigned char* Sobel(unsigned char *idata, int ih, int iw){
 	int i, j;
-	unsigned char *idata_change = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
+	unsigned char *idata_change = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	idata_change = idata;
 	unsigned char gx, gy;
 	
@@ -86,7 +86,7 @@ unsigned char* Sobel(unsigned char *idata, int ih, int iw){
 
 unsigned char* smoothing(unsigned char *idata, int ih, int iw){
 	int i, j;
-	unsigned char *idata_change = (unsigned char*) calloc((iw*ih+1), sizeof(unsigned char));
+	unsigned char *idata_change = (unsigned char*) calloc((iw*ih), sizeof(unsigned char));
 
 	for(i=2; i<=ih-2; i++)
 		for(j=2; j<iw-2; j++)
@@ -127,7 +127,8 @@ int main(){
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
 	idata_new_change1 = Sobel(idata_new, ih, iw);
-	/*unsigned char *idata_new_change2;
+
+	unsigned char *idata_new_change2;
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
 	idata_new_change2 = smoothing(idata_new_change1, ih, iw);
@@ -181,7 +182,6 @@ int main(){
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 	}
-	printf("e = %d, E[2 662 040].v1 = %d, v2 = %d\n", e, E[2662040].v1, E[2662040].v2);
 
 	//Разбиваем на компоненты 	
 	for(i=0; i<e-5000; i++)
@@ -202,18 +202,21 @@ int main(){
 					Forest[j] -> change_color = true;
 				}
 		}
-	}*/
+	}
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output5.png";
+	char *outputPath = "output.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	odata = idata_new_change1;
+	odata = idata_new_change2;
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, idata_new_change1, 0);
-	stbi_image_free(idata);
-		
+	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
+	/*stbi_image_free(idata);
+	stbi_image_free(idata_new);
+	stbi_image_free(idata_new_change1);
+	stbi_image_free(idata_new_change2);
+	*/	
  return 0;
 }
