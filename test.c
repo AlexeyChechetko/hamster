@@ -122,16 +122,13 @@ int main(){
 		size++;
 	}
 
-	/*//Применяем фильтры
-	unsigned char *idata_new_change1;
-	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-		
-	idata_new_change1 = Sobel(idata_new, ih, iw);
+	//Применяем фильтры
+	idata_new = Sobel(idata_new, ih, iw);
 
-	unsigned char *idata_new_change2;
+	/*unsigned char *idata_new_change2;
 	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
-	idata_new_change2 = smoothing(idata_new_change1, ih, iw);
+	idata_new = smoothing(idata_new_change1, ih, iw);
 	*/
 
 	//Создаем пиксели
@@ -206,7 +203,7 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output.png";
+	char *outputPath = "output2.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	odata = idata_new;
