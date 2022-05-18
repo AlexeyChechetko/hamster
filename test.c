@@ -121,7 +121,7 @@ int main(){
 		size++;
 	}
 	
-	//Применяем фильтры
+	/*//Применяем фильтры
 	unsigned char *idata_new_change1;
 	idata_new_change1 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 		
@@ -202,17 +202,18 @@ int main(){
 					Forest[j] -> change_color = true;
 				}
 		}
-	}
+	}*/
 
 
 	//Путь к выходной картинке 
 	char *outputPath = "output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, idata_new_change2, 0);
+	stbi_write_png(outputPath, iw, ih, 1, idata_new, 0);
 	stbi_image_free(idata);
-	stbi_image_free(idata_new_change1);
-	stbi_image_free(idata_new_change2);
+	stbi_image_free(idata_new);
+	//stbi_image_free(idata_new_change1);
+	//stbi_image_free(idata_new_change2);
 		
  return 0;
 }
