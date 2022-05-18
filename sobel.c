@@ -11,7 +11,6 @@
 unsigned char* Sobel(unsigned char *idata, int ih, int iw){
 	int i, j;
 	unsigned char *idata_change = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	idata_change = idata;
 	unsigned char gx, gy;
 	
 	for(i=2; i<ih-2; i++)
@@ -26,7 +25,7 @@ unsigned char* Sobel(unsigned char *idata, int ih, int iw){
 
 
 int main(){
-	int i, size=0;
+	int i, j,  size=0;
 
 	//Путь к файлу	
 	char *inputPath = "hampster.png";
@@ -52,9 +51,16 @@ int main(){
 
 	//Применяем фильтры
 	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	odata = idata_new;
 
-	odata = Sobel(idata_new, ih, iw);
+	unsigned char gx, gy;
+	
+	for(i=2; i<ih-2; i++)
+		for(j=2; j<iw-2; j++){
+			gx = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*i+(j-1)]-1*idata[iw*(i+1)+(j-1)]+1*idata[iw*(i-1)+(j+1)]+2*idata[iw*i+(j+1)]+1*idata[iw*(i+1)+(j+1)];
+			gy = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*(i-1)+j]-1*idata[iw*(i-1)+(j+1)]+1*idata[iw*(i+1)+(j-1)]+2*idata[iw*(i+1)+j]+1*idata[iw*(i+1)+(j+1)];
+			odata[iw*i+j] = sqrt(gx*gx + gy*gy);
+		}
+
 
 	//Путь к выходной картинке 
 	char *outputPath = "sobel.png";
