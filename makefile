@@ -1,8 +1,8 @@
-all: sobel.o
-	gcc sobel.o -o sobel.exe -lm
+all: gauss.o
+	gcc gauss.o -o gauss -lm
 
-sobel.o:
-	gcc -c sobel.c
+gauss.o:
+	gcc -c gauss.c
 
 clean:
 	rm *o
