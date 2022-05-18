@@ -39,9 +39,9 @@ int main(){
 
 	for(i=1; i<ih-1; i++)
 		for(j=1; j<iw-1; j++){
-			gx = idata[iw*(i-1)+(j+1)] + idata[iw*i+(j+1)] + idata[iw*(i+1)+(j+1)] - idata[iw*(i+1)+(j-1)] - idata[iw*i+(j-1)] - idata[iw*(i-1)+(j-1)];
-		       	gy = idata[iw*(i+1)+(j-1)] + idata[iw*(i+1)+j] + idata[iw*(i+1)+(j+1)] - idata[iw*(i-1)+(j-1)] - idata[iw*(i-1)+j] - idata[iw*(i-1)+(j+1)];
-	       		odata_s[iw*i+j] = sqrt(gx*gx + gy*gy/2);	       
+			odata_s[iw*i+j] =(1/9)*( idata[iw*(i-1)+(j+1)] + idata[iw*i+(j+1)] + idata[iw*(i+1)+(j+1)] + idata[iw*(i+1)+(j-1)] + idata[iw*i+(j-1)] + idata[iw*(i-1)+(j-1)]);
+		       	//gy = idata[iw*(i+1)+(j-1)] + idata[iw*(i+1)+j] + idata[iw*(i+1)+(j+1)] - idata[iw*(i-1)+(j-1)] - idata[iw*(i-1)+j] - idata[iw*(i-1)+(j+1)];
+	       		//odata_s[iw*i+j] = sqrt(gx*gx + gy*gy/2);	       
 		}
 
 
@@ -53,7 +53,7 @@ int main(){
 			odata_g[iw*i+j] = (0.000789)*(odata_s[iw*(i-2)+(j-2)] + odata_s[iw*(i+2)+(j-2)] + odata_s[iw*(i+2)+(j+2)] + odata_s[iw*(i-2)+(j+2)]) + (0.006581)*(odata_s[iw*(i-2)+(j-1)] + odata_s[iw*(i-2)+(j+1)] + odata_s[iw*(i+2)+(j-1)] + odata_s[iw*(i+2)+(j+1)] + odata_s[iw*(i-1)+(j-2)] + odata_s[iw*(i-1)+(j+2)] + odata_s[iw*(i+1)+(j-2)] + odata_s[iw*(i+1)+(j+2)]) + (0.013347)*(odata_s[iw*(i-2)+j] + odata_s[iw*(i+2)+j] + odata_s[iw*i+(j-2)] + odata_s[iw*i+(j+2)]) + (0.054901)*(odata_s[iw*(i-1)+(j-1)] + odata_s[iw*(i-1)+(j+1)] + odata_s[iw*(i+1)+(j-1)] + odata_s[iw*(i+1)+(j+1)]) + (0.111345)*(odata_s[iw*i+(j-1)] + odata_s[iw*i+(j+1)] + odata_s[iw*(i-1)+j] + odata_s[iw*(i+1)+j]) + (0.225821)*odata_s[iw*i+j]; 
 
 	//Путь к выходной картинке 
-	char *outputPath = "gaus4.png";
+	char *outputPath = "gaus.png";
 	
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata_g, 0);
