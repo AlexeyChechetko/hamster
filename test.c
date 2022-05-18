@@ -117,10 +117,8 @@ int main(){
 	unsigned char *idata_new;
 	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
+		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5 + idata[i+3]*10)/32;
 		size++;
-		if(size<100)
-			printf("%u\n", idata_new[size]);
 	}
 		
 	/*//Применяем фильтры
@@ -211,7 +209,7 @@ int main(){
 	char *outputPath = "output.png";
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, n, idata_new, 0);
+	stbi_write_png(outputPath, iw, ih, 1, idata_new, 0);
 	stbi_image_free(idata);
 	stbi_image_free(idata_new);
 	//stbi_image_free(idata_new_change1);
