@@ -206,7 +206,7 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output3.png";
+	char *outputPath = "output4.png";
 	
 	unsigned char *odata = (unsigned char*) malloc((iw*ih+1)*sizeof(unsigned char));
 	odata = idata_new;
