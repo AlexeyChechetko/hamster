@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -31,26 +32,28 @@ int main(){
 		size++;
 	}
 
-	//Применяем фильтры
-	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	//Применяем фильтр Гаусса
+	unsigned char *idata_new2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	
 	for(i=2; i<=ih-2; i++)
 		for(j=2; j<iw-2; j++)
-			odata[iw*i+j] = (0.0453542)*idata_new[iw*(i-1)+(j-1)]+(0.0566406)*idata_new[iw*i+(j-1)]+(0.0453542)*idata_new[iw*(i+1)+(j-1)]+(0.0453542)*idata_new[iw*(i-1)+(j+1)]+(0.0566406)*idata_new[iw*i+(j+1)]+(0.045354)*idata_new[iw*(i+1)+(j+1)]+(0.0566406)*idata_new[iw*(i-1)+j]+(0.0566406)*idata_new[iw*(i+1)+j];
+			idata_new2[iw*i+j] = (0.0924)*idata_new[iw*(i-1)+(j-1)]+(0.1192)*idata_new[iw*i+(j-1)]+(0.0924)*idata_new[iw*(i+1)+(j-1)]+(0.0924)*idata_new[iw*(i-1)+(j+1)]+(0.1192)*idata_new[iw*i+(j+1)]+(0.0924)*idata_new[iw*(i+1)+(j+1)]+(0.1192)*idata_new[iw*(i-1)+j]+(0.1192)*idata_new[iw*(i+1)+j];
 
-	/*unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+
+	//Применяем фильтр Собеля
+	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	unsigned char gx, gy;
 	
-	for(i=2; i<ih-2; i++)
+	for(i=2; i<=ih-2; i++)
 		for(j=2; j<iw-2; j++){
-			gx = -1*idata_new2[iw*(i-1)+(j-1)]-2*idata_new2[iw*i+(j-1)]-1*idata_new2[iw*(i+1)+(j-1)]+1*idata_new2[iw*(i-1)+(j+1)]+2*idata_new2[iw*i+(j+1)]+1*idata_new2[iw*(i+1)+(j+1)];
-			gy = -1*idata_new2[iw*(i-1)+(j-1)]-2*idata_new2[iw*(i-1)+j]-1*idata_new2[iw*(i-1)+(j+1)]+1*idata_new2[iw*(i+1)+(j-1)]+2*idata_new2[iw*(i+1)+j]+1*idata_new2[iw*(i+1)+(j+1)];
+			gy = 3*idata_new2[iw*(i-1)+(j-1)]+10*idata_new2[iw*i+(j-1)]+3*idata_new2[iw*(i+1)+(j-1)]-3*idata_new2[iw*(i-1)+(j+1)]-10*idata_new2[iw*i+(j+1)]-3*idata_new2[iw*(i+1)+(j+1)];
+			gx = 3*idata_new2[iw*(i-1)+(j-1)]+10*idata_new2[iw*(i-1)+j]+3*idata_new2[iw*(i-1)+(j+1)]-3*idata_new2[iw*(i+1)+(j-1)]-10*idata_new2[iw*(i+1)+j]-3*idata_new2[iw*(i+1)+(j+1)];
 			odata[iw*i+j] = sqrt(gx*gx + gy*gy);
 		}
 
-	*/
+	
 	//Путь к выходной картинке 
-	char *outputPath = "sobel.png";
+	char *outputPath = "sobel3.png";
 	
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
