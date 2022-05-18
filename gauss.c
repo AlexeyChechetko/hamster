@@ -39,8 +39,8 @@ int main(){
 
 	for(i=1; i<ih-1; i++)
 		for(j=1; j<iw-1; j++){
-			gx = 3*idata[iw*(i-1)+(j+1)] + 3*idata[iw*i+(j+1)] + 3*idata[iw*(i+1)+(j+1)] - 2*idata[iw*(i+1)+(j-1)] - 2*idata[iw*i+(j-1)] - 5*idata[iw*(i-1)+(j-1)];
-		       	gy = 3*idata[iw*(i+1)+(j-1)] + 3*idata[iw*(i+1)+j] + 3*idata[iw*(i+1)+(j+1)] - 2*idata[iw*(i-1)+(j-1)] - 2*idata[iw*(i-1)+j] - 5*idata[iw*(i-1)+(j+1)];
+			gx = idata[iw*(i-1)+(j+1)] + idata[iw*i+(j+1)] + idata[iw*(i+1)+(j+1)] - idata[iw*(i+1)+(j-1)] - idata[iw*i+(j-1)] - idata[iw*(i-1)+(j-1)];
+		       	gy = idata[iw*(i+1)+(j-1)] + idata[iw*(i+1)+j] + idata[iw*(i+1)+(j+1)] - idata[iw*(i-1)+(j-1)] - idata[iw*(i-1)+j] - idata[iw*(i-1)+(j+1)];
 	       		odata_s[iw*i+j] = sqrt(gx*gx + gy*gy/2);	       
 		}
 
