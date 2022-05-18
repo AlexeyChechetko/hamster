@@ -1,8 +1,8 @@
-all: main.o
-	gcc main.o -o main.exe
+all: test.o
+	gcc test.o -o test.exe -lm
 
-main.o:
-	gcc -c main.c
+test.o:
+	gcc -c test.c
 
 clean:
 	rm *o
