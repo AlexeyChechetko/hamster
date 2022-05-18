@@ -212,7 +212,7 @@ int main(){
 	odata = idata_new_change1;
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
+	stbi_write_png(outputPath, iw, ih, 1, idata_new_change1, 0);
 	stbi_image_free(idata);
 		
  return 0;
