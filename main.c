@@ -109,8 +109,8 @@ int main(){
 	//Гаусс * 2
 	unsigned char *odata;
 	odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-    	for (i=2;i<=ih-2;i++){
-        	for (j=2;j<iw-2;j++){
+    	for (i=1;i<=ih-2;i++){
+        	for (j=1;j<iw-2;j++){
             		odata[iw*i+j]=0.0924*idata[iw*(i-1)+(j-1)]+0.01192*idata[iw*(i-1)+(j)]+0.0924*idata[iw*(i-1)+(j+1)]+0.1192*idata[iw*(i)+(j-1)]+0.1538*idata[iw*(i)+(j)]+0.1192*idata[iw*(i)+(j+1)]+0.0924*idata[iw*(i+1)+(j-1)]+0.1192*idata[iw*(i+1)+(j)]+0.0924*idata[iw*(i+1)+(j+1)];
         	}
     	}
@@ -118,13 +118,13 @@ int main(){
 
 	unsigned char *odata2;
 	odata2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-    	for (i=2;i<=ih-2;i++){
-        	for (j=2;j<iw-2;j++){
+    	for (i=1;i<=ih-2;i++){
+        	for (j=1;j<iw-2;j++){
             		odata2[iw*i+j]=0.0924*odata[iw*(i-1)+(j-1)]+0.01192*odata[iw*(i-1)+(j)]+0.0924*odata[iw*(i-1)+(j+1)]+0.1192*odata[iw*(i)+(j-1)]+0.1538*odata[iw*(i)+(j)]+0.1192*odata[iw*(i)+(j+1)]+0.0924*odata[iw*(i+1)+(j-1)]+0.1192*odata[iw*(i+1)+(j)]+0.0924*odata[iw*(i+1)+(j+1)];
         	}
     	}
 	
-
+	printf("%d %d %d\n", size, iw, ih);
 	//Повышаем контрастность
   	for(i=0; i<size; i++){
 		if(odata2[i]>120)
@@ -157,28 +157,28 @@ int main(){
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
 	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(odata2[iw*(P[i]->num_y-1) + P[i]->num_x] - odata2[i]) < 5)){
+		if((P[i] -> num_y-1 > 0) && (odata2[iw*(P[i]->num_y-1) + P[i]->num_x] - odata2[i] == 0)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_y+1 < ih) && (abs(odata2[iw*(P[i]->num_y+1) + P[i]->num_x] - odata2[i]) < 5)){
+		if((P[i] -> num_y+1 < ih) && (odata2[iw*(P[i]->num_y+1) + P[i]->num_x] - odata2[i] == 0)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x-1 > 0) && (abs(odata2[iw*(P[i]->num_y) + P[i]->num_x-1] - odata2[i]) < 5)){
+		if((P[i] -> num_x-1 > 0) && (odata2[iw*(P[i]->num_y) + P[i]->num_x-1] - odata2[i] == 0)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x+1 < iw) && (abs(odata2[iw*(P[i]->num_y) + P[i]->num_x+1] - odata2[i]) < 5)){
+		if((P[i] -> num_x+1 < iw) && (odata2[iw*(P[i]->num_y) + P[i]->num_x+1] - odata2[i] == 0)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
@@ -203,9 +203,9 @@ int main(){
 			color = odata2[T->pix->number]; 
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata3[j*4] = (color+rand()%100)%250;
+					idata3[j*4] = (color + idata3[i*4])%150;
 					idata3[j*4+1] = (color+20)%250;
-					idata3[j*4+2] = (color*5)%250;
+					idata3[j*4+2] = (color+5)%250;
 					Forest[j] -> change_color = true;
 				}
 		}
