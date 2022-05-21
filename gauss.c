@@ -32,35 +32,30 @@ int main(){
 		size++;
 	}
 
-
-	//Фильтр Собеля
-	unsigned char *odata_s = (unsigned char*) calloc((iw*ih), sizeof(unsigned char));
-	unsigned char gx, gy;
-
-	for(i=1; i<ih-1; i++)
-		for(j=1; j<iw-1; j++){
-			odata_s[iw*i+j] =(1/9)*( idata[iw*(i-1)+(j+1)] + idata[iw*i+(j+1)] + idata[iw*(i+1)+(j+1)] + idata[iw*(i+1)+(j-1)] + idata[iw*i+(j-1)] + idata[iw*(i-1)+(j-1)]);
-		       	//gy = idata[iw*(i+1)+(j-1)] + idata[iw*(i+1)+j] + idata[iw*(i+1)+(j+1)] - idata[iw*(i-1)+(j-1)] - idata[iw*(i-1)+j] - idata[iw*(i-1)+(j+1)];
-	       		//odata_s[iw*i+j] = sqrt(gx*gx + gy*gy/2);	       
-		}
+	//Повышаем контрастностью Все, светлее 160, делаем белым. Все, что темнее 95, делаем черным
+	for(i=0; i<size; i++){
+		if(idata[i]>160)
+			idata[i] = 255;
+		else if(idata[i]<95)
+			idata[i] = 90;
+	}	
 
 
 	//Размытие по Гауссу
-	unsigned char *odata_g = (unsigned char*) calloc((iw*ih), sizeof(unsigned char));
+	unsigned char *odata = (unsigned char*) calloc((iw*ih), sizeof(unsigned char));
 
 	for(i=2; i<ih-2; i++)
 		for(j=2; j<iw-2; j++)
-			odata_g[iw*i+j] = (0.000789)*(odata_s[iw*(i-2)+(j-2)] + odata_s[iw*(i+2)+(j-2)] + odata_s[iw*(i+2)+(j+2)] + odata_s[iw*(i-2)+(j+2)]) + (0.006581)*(odata_s[iw*(i-2)+(j-1)] + odata_s[iw*(i-2)+(j+1)] + odata_s[iw*(i+2)+(j-1)] + odata_s[iw*(i+2)+(j+1)] + odata_s[iw*(i-1)+(j-2)] + odata_s[iw*(i-1)+(j+2)] + odata_s[iw*(i+1)+(j-2)] + odata_s[iw*(i+1)+(j+2)]) + (0.013347)*(odata_s[iw*(i-2)+j] + odata_s[iw*(i+2)+j] + odata_s[iw*i+(j-2)] + odata_s[iw*i+(j+2)]) + (0.054901)*(odata_s[iw*(i-1)+(j-1)] + odata_s[iw*(i-1)+(j+1)] + odata_s[iw*(i+1)+(j-1)] + odata_s[iw*(i+1)+(j+1)]) + (0.111345)*(odata_s[iw*i+(j-1)] + odata_s[iw*i+(j+1)] + odata_s[iw*(i-1)+j] + odata_s[iw*(i+1)+j]) + (0.225821)*odata_s[iw*i+j]; 
+			odata[iw*i+j] = (0.000789)*(idata[iw*(i-2)+(j-2)] + idata[iw*(i+2)+(j-2)] + idata[iw*(i+2)+(j+2)] + idata[iw*(i-2)+(j+2)]) + (0.006581)*(idata[iw*(i-2)+(j-1)] + idata[iw*(i-2)+(j+1)] + idata[iw*(i+2)+(j-1)] + idata[iw*(i+2)+(j+1)] + idata[iw*(i-1)+(j-2)] + idata[iw*(i-1)+(j+2)] + idata[iw*(i+1)+(j-2)] + idata[iw*(i+1)+(j+2)]) + (0.013347)*(idata[iw*(i-2)+j] + idata[iw*(i+2)+j] + idata[iw*i+(j-2)] + idata[iw*i+(j+2)]) + (0.054901)*(idata[iw*(i-1)+(j-1)] + idata[iw*(i-1)+(j+1)] + idata[iw*(i+1)+(j-1)] + idata[iw*(i+1)+(j+1)]) + (0.111345)*(idata[iw*i+(j-1)] + idata[iw*i+(j+1)] + idata[iw*(i-1)+j] + idata[iw*(i+1)+j]) + (0.225821)*idata[iw*i+j]; 
 
 	//Путь к выходной картинке 
 	char *outputPath = "gaus.png";
 	
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, odata_g, 0);
+	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
 	stbi_image_free(idata3);
 	stbi_image_free(idata);
-	stbi_image_free(odata_g);
-	stbi_image_free(odata_s);
+	stbi_image_free(odata);
  
  return 0;
 }
