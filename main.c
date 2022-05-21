@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -71,7 +72,7 @@ void Union(Tree *x, Tree *y){
 
 int main(){
 	int i, j, size=0, e=0;
-
+	srand(time(NULL));
 
 	//Путь к файлу	
 	char *inputPath = "hampster.png";
@@ -202,9 +203,9 @@ int main(){
 			color = odata2[T->pix->number]; 
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata3[j*4] = color*0.1937;
-					idata3[j*4+1] = (color+1353)%250;
-					idata3[j*4+2] = (color-10)%250;
+					idata3[j*4] = (color+rand()%100)%250;
+					idata3[j*4+1] = (color+20)%250;
+					idata3[j*4+2] = (color*5)%250;
 					Forest[j] -> change_color = true;
 				}
 		}
