@@ -1,8 +1,8 @@
-all: gauss.o
-	gcc gauss.o -o gauss -lm
+all: test.o
+	gcc test.o -o test -lm
 
-gauss.o:
-	gcc -c gauss.c
+test.o:
+	gcc -c test.c
 
 clean:
 	rm *o

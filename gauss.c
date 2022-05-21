@@ -61,9 +61,9 @@ int main(){
 	
 	//Повышаем контрастностью Все, светлее 160, делаем белым. Все, что темнее 95, делаем черным
 	for(i=0; i<size; i++){
-		if(odata2[i]>140)
+		if(odata2[i]>100)
 			odata2[i] = 255;
-		else if(odata2[i]<50)
+		else if(odata2[i]<70)
 			odata2[i] = 0;
 	}	
 
@@ -76,7 +76,7 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "gaus.png";
+	char *outputPath = "gaus2.png";
 	
 	//Записываем картинку 
 	stbi_write_png(outputPath, iw, ih, 1, odata2, 0);

@@ -68,34 +68,6 @@ void Union(Tree *x, Tree *y){
 	return;
 }
 
-unsigned char* Sobel(unsigned char *idata, int ih, int iw){
-	int i, j;
-	unsigned char *idata_change = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	idata_change = idata;
-	unsigned char gx, gy;
-	
-	for(i=2; i<ih-2; i++)
-		for(j=2; j<iw-2; j++){
-			gx = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*i+(j-1)]-1*idata[iw*(i+1)+(j-1)]+1*idata[iw*(i-1)+(j+1)]+2*idata[iw*i+(j+1)]+1*idata[iw*(i+1)+(j+1)];
-			gy = -1*idata[iw*(i-1)+(j-1)]-2*idata[iw*(i-1)+j]-1*idata[iw*(i-1)+(j+1)]+1*idata[iw*(i+1)+(j-1)]+2*idata[iw*(i+1)+j]+1*idata[iw*(i+1)+(j+1)];
-			idata_change[iw*i+j] = sqrt(gx*gx + gy*gy);
-		}
-	
-	return idata_change;
-}
-
-unsigned char* smoothing(unsigned char *idata, int ih, int iw){
-	int i, j;
-	unsigned char *idata_change = (unsigned char*) calloc((iw*ih), sizeof(unsigned char));
-
-	for(i=2; i<=ih-2; i++)
-		for(j=2; j<iw-2; j++)
-			idata_change[iw*i+j] = (1/9)*idata[iw*(i-1)*(j-1)]+(1/9)*idata[iw*i+(j-1)]+(1/9)*idata[iw*(i+1)+(j-1)]+(1/9)*idata[iw*(i-1)+(j+1)]+(1/9)*idata[iw*i+(j+1)]+(1/9)*idata[iw*(i+1)+(j+1)];
-		
-
-	return idata_change;
-}
-
 
 int main(){
 	int i, j, size=0, e=0;
@@ -106,32 +78,60 @@ int main(){
 	int ih, iw, n;
 	
 	//Загружаем изображение, чтобы получить информацию о ширине, высоте и цветовом канале
-	unsigned char *idata = stbi_load(inputPath, &iw, &ih, &n, 0);
-	if (idata == NULL){
+	unsigned char *idata3 = stbi_load(inputPath, &iw, &ih, &n, 0);
+	if (idata3 == NULL){
 		printf("Error: can't read file %s\n", inputPath);
 		return -1;
 	}
 
-	printf("%d %d %d\n", iw, ih, n);
-
 	//Переходим к одноканальному изображению
-	unsigned char *idata_new;
-	idata_new = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	unsigned char *idata;
+	idata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 	for(i=0; i<iw*ih*n-4; i+=4){	
-		idata_new[size] = (idata[i]*11 + idata[i+1]*16 + idata[i+2]*5)/32;
+		idata[size] = (idata3[i]*11 + idata3[i+1]*16 + idata3[i+2]*5)/32;
 		size++;
 	}
 
-	//Применяем фильтры
-	idata_new = Sobel(idata_new, ih, iw);
 
-	/*unsigned char *idata_new_change2;
-	idata_new_change2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
 
-	idata_new = smoothing(idata_new_change1, ih, iw);
-	*/
 
-	//Создаем пиксели
+	//Повышаем контрастность
+  	for(i=0; i<size; i++){
+		if(idata[i]>170)
+			idata[i] = 255;
+		else if(idata[i]<70)
+			idata[i] = 0;
+	}
+
+	unsigned char *odata;
+	odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	//Гауссово размытие. Можно повторить его несколько раз, добавив внешний цикл. Тогда сглаживание будет сильнее (и тона станут темнее)
+    	for (i=2;i<=ih-2;i++){
+        	for (j=2;j<iw-2;j++){
+            		odata[iw*i+j]=0.0924*idata[iw*(i-1)+(j-1)]+0.01192*idata[iw*(i-1)+(j)]+0.0924*idata[iw*(i-1)+(j+1)]+0.1192*idata[iw*(i)+(j-1)]+0.1538*idata[iw*(i)+(j)]+0.1192*idata[iw*(i)+(j+1)]+0.0924*idata[iw*(i+1)+(j-1)]+0.1192*idata[iw*(i+1)+(j)]+0.0924*idata[iw*(i+1)+(j+1)];
+        	}
+    	}
+
+	unsigned char *odata2;
+	odata2 = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
+	//Гауссово размытие. Можно повторить его несколько раз, добавив внешний цикл. Тогда сглаживание будет сильнее (и тона станут темнее)
+    	for (i=2;i<=ih-2;i++){
+        	for (j=2;j<iw-2;j++){
+            		odata2[iw*i+j]=0.0924*odata[iw*(i-1)+(j-1)]+0.01192*odata[iw*(i-1)+(j)]+0.0924*odata[iw*(i-1)+(j+1)]+0.1192*odata[iw*(i)+(j-1)]+0.1538*odata[iw*(i)+(j)]+0.1192*odata[iw*(i)+(j+1)]+0.0924*odata[iw*(i+1)+(j-1)]+0.1192*odata[iw*(i+1)+(j)]+0.0924*odata[iw*(i+1)+(j+1)];
+        	}
+    	}
+	
+	//Повышаем контрастность
+  	for(i=0; i<size; i++){
+		if(odata2[i]>100)
+			odata2[i] = 255;
+		else if(odata2[i]<70)
+			odata2[i] = 0;
+	}
+
+
+
+
 	pixel **P;
         P = (pixel**) malloc(size*sizeof(pixel*));
 	for(i=0; i<size; i++){
@@ -151,51 +151,56 @@ int main(){
 	Edge *E;
 	E = (Edge*) malloc(1*sizeof(Edge));
 	for(i=0; i<size; i++){
-		if((P[i] -> num_y-1 > 0) && (abs(idata_new[iw*(P[i]->num_y-1) + P[i]->num_x] - idata_new[i]) < 5)){
+		if((P[i] -> num_y-1 > 0) && (abs(odata2[iw*(P[i]->num_y-1) + P[i]->num_x] - odata2[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y-1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E,(e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_y+1 < ih) && (abs(idata_new[iw*(P[i]->num_y+1) + P[i]->num_x] - idata_new[i]) < 5)){
+		if((P[i] -> num_y+1 < ih) && (abs(odata2[iw*(P[i]->num_y+1) + P[i]->num_x] - odata2[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y+1) + P[i]->num_x;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x-1 > 0) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x-1] - idata_new[i]) < 5)){
+		if((P[i] -> num_x-1 > 0) && (abs(odata2[iw*(P[i]->num_y) + P[i]->num_x-1] - odata2[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x-1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 
-		if((P[i] -> num_x+1 < iw) && (abs(idata_new[iw*(P[i]->num_y) + P[i]->num_x+1] - idata_new[i]) < 5)){
+		if((P[i] -> num_x+1 < iw) && (abs(odata2[iw*(P[i]->num_y) + P[i]->num_x+1] - odata2[i]) < 5)){
 			E[e].v1 = i;
 			E[e].v2 = iw*(P[i]->num_y) + P[i]->num_x+1;
 		        e++;	
 			E = realloc(E, (e+1)*sizeof(Edge));
 		}
 	}
-
+	printf("OK\n");
 	//Разбиваем на компоненты 	
-	for(i=0; i<e; i++)
+	for(i=0; i<e-4000; i++)
 		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2])){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		}
 	
 	//Меняем цвет	
+	//idata[size] = (idata3[i]*11 + idata3[i+1]*16 + idata3[i+2]*5)/32;
 	Tree *T;
-	unsigned char color;
+	unsigned char color1, color2, color3;
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
 			T = Forest[i] -> par;
-			color =  (20+idata_new[T->pix->number])%250;
+			color1 =  (32*odata2[T->pix->number] - 16*idata3[T->pix->number*4+1] - 5*idata3[T->pix->number*4+2])/11;
+			color2 =  (32*odata2[T->pix->number] - 11*idata3[T->pix->number*4] - 5*idata3[T->pix->number*4+2])/16;
+			color3 =  (32*odata2[T->pix->number] - 11*idata3[T->pix->number*4] - 16*idata3[T->pix->number*4+1])/5;
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata_new[j] = color;
+					idata3[j*4] = color1;
+					idata3[j*4+1] = color2;
+					idata3[j*4+2] = color3;
 					Forest[j] -> change_color = true;
 				}
 		}
@@ -203,17 +208,15 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output2.png";
+	char *outputPath = "output3.png";
 	
-	unsigned char *odata = (unsigned char*) malloc((iw*ih)*sizeof(unsigned char));
-	odata = idata_new;
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 1, odata, 0);
-	/*stbi_image_free(idata);
-	stbi_image_free(idata_new);
-	stbi_image_free(idata_new_change1);
-	stbi_image_free(idata_new_change2);
-	*/	
+	stbi_write_png(outputPath, iw, ih, 3, idata3, 0);
+	stbi_image_free(idata3);
+	stbi_image_free(idata);
+	stbi_image_free(odata);
+	stbi_image_free(odata2);
+		
  return 0;
 }
