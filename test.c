@@ -181,7 +181,7 @@ int main(){
 	}
 	printf("OK\n");
 	//Разбиваем на компоненты 	
-	for(i=0; i<e-4000; i++)
+	for(i=0; i<e-3000; i++)
 		if(Find_Set(Forest[E[i].v1]) != Find_Set(Forest[E[i].v2])){
 			Union(Forest[E[i].v1], Forest[E[i].v2]);
 		}
@@ -189,18 +189,16 @@ int main(){
 	//Меняем цвет	
 	//idata[size] = (idata3[i]*11 + idata3[i+1]*16 + idata3[i+2]*5)/32;
 	Tree *T;
-	unsigned char color1, color2, color3;
+	unsigned char color;
 	for(i=0; i<size; i++){
 		if(Forest[i] -> change_color==false){
 			T = Forest[i] -> par;
-			color1 =  (32*odata2[T->pix->number] - 16*idata3[T->pix->number*4+1] - 5*idata3[T->pix->number*4+2])/11;
-			color2 =  (32*odata2[T->pix->number] - 11*idata3[T->pix->number*4] - 5*idata3[T->pix->number*4+2])/16;
-			color3 =  (32*odata2[T->pix->number] - 11*idata3[T->pix->number*4] - 16*idata3[T->pix->number*4+1])/5;
+			color = odata2[T->pix->number]; 
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata3[j*4] = color1;
-					idata3[j*4+1] = color2;
-					idata3[j*4+2] = color3;
+					idata3[j*4] = color*0.1937;
+					idata3[j*4+1] = (color+1353)%250;
+					idata3[j*4+2] = (color-10)%250;
 					Forest[j] -> change_color = true;
 				}
 		}
@@ -208,11 +206,11 @@ int main(){
 
 
 	//Путь к выходной картинке 
-	char *outputPath = "output3.png";
+	char *outputPath = "output2.png";
 	
 
 	//Записываем картинку 
-	stbi_write_png(outputPath, iw, ih, 3, idata3, 0);
+	stbi_write_png(outputPath, iw, ih, n, idata3, 0);
 	stbi_image_free(idata3);
 	stbi_image_free(idata);
 	stbi_image_free(odata);
