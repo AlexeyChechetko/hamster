@@ -101,7 +101,7 @@ int main(){
   	for(i=0; i<size; i++){
 		if(idata[i]>170)
 			idata[i] = 255;
-		else if(idata[i]<70)
+		else if(idata[i]<80)
 			idata[i] = 0;
 	}
 
@@ -129,7 +129,7 @@ int main(){
   	for(i=0; i<size; i++){
 		if(odata2[i]>120)
 			odata2[i] = 255;
-		else if(odata2[i]<70)
+		else if(odata2[i]<75)
 			odata2[i] = 0;
 		else
 			odata2[i] = 127;
