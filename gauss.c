@@ -36,7 +36,7 @@ int main(){
 	for(i=0; i<size; i++){
 		if(idata[i]>160)
 			idata[i] = 255;
-		else if(idata[i]<95)
+		else if(idata[i]<110)
 			idata[i] = 90;
 	}	
 
