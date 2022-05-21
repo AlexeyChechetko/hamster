@@ -203,7 +203,7 @@ int main(){
 			color = odata2[T->pix->number]; 
 			for(j=0;j<size;j++)
 				if(Forest[j] -> par == T){
-					idata3[j*4] = (color + idata3[i*4])%150;
+					idata3[j*4] = (color)%150;
 					idata3[j*4+1] = (color+20)%250;
 					idata3[j*4+2] = (color+5)%250;
 					Forest[j] -> change_color = true;
